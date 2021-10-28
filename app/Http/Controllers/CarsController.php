@@ -133,10 +133,15 @@ class CarsController extends Controller
         if (!($request->hasFile('image'))) {
             return back();
         }
+        if ($request->hasFile('image')) {
+            $fileName = time() . '_' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->storeAs(
+                'public/images/',
+                $fileName
+            );
+            $car->image = $fileName;
+        }
 
-        $fileName = $request->file('image')->getClientOriginalName();
-
-        $car->image = $request->file('image')->store('public/images', $fileName);
         $car->save();
 
 
